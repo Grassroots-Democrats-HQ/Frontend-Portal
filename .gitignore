@@ -1,3 +1,5 @@
+.eslintcache
+
 # React .gitignore
 .DS_STORE
 node_modules
