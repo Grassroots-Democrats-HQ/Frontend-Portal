@@ -2,14 +2,14 @@ import React from "react";
 
 // components
 
-import CardTable from "components/Cards/CardTable.js";
+import MyCreditLog from "components/Cards/MyCreditLog.js";
 
-export default function Tables() {
+export default function Creditlog() {
   return (
     <>
       <div className="flex flex-wrap mt-4">
         <div className="w-full mb-12 px-4">
-          <CardTable color="dark" />
+          <MyCreditLog color="dark" />
         </div>
       </div>
     </>

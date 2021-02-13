@@ -6,14 +6,14 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/styles/tailwind.css"
 // layouts
 
-import Admin from "layouts/Admin";
+import App from "App";
 
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
       {/* add routes with layouts */}
-      <Route path="/" component={Admin} />
+      <Route path="/" component={App} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>

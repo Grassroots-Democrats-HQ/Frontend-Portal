@@ -1,4 +1,4 @@
-# Frontend-Postcarding
+# Frontend-Portal
 
 signup to write postcards form sends json of following to firebase['signups']:
 - firstName

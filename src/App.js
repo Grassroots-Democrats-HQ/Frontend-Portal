@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 // components
@@ -13,11 +13,35 @@ import FooterAdmin from "components/Footers/FooterAdmin.js";
 import Dashboard from "views/admin/Dashboard.js";
 import Maps from "views/admin/Maps.js";
 import Postcarding from "views/admin/Postcarding.js";
-import Tables from "views/admin/Tables.js";
+import Creditlog from "views/admin/Creditlog.js";
 import Homepage from "views/Homepage"
 
-export default function Admin() {
+//firebase
+
+import firebase from "Firebase"
+
+export default function App() {
   const [signedIn, setSignedIn] = useState(false)
+
+  // function AddUserToFirebase(uid)
+  // {
+  //   firebase.database().ref(`/creditlogs/${uid}`).set({"timeMetadata": new Date().getTime()})
+  // }
+
+  // useEffect(() =>
+  // {
+  //   if (signedIn)
+  //   {
+  //     firebase.database().ref(`/creditlogs/${firebase.auth().currentUser.uid}`).once('value', snapshot => {
+  //       if (snapshot.exists()) {
+  //         console.log("found user's creditlog data in firebase.")
+  //       } else {
+  //         console.log("didn't find user's creditlog data in firebase. Creating new section in firebase for user.")
+  //         AddUserToFirebase(firebase.auth().currentUser.uid)
+  //       }
+  //     })
+  //   }
+  // },[signedIn]);
 
   return (
     <>
@@ -33,7 +57,7 @@ export default function Admin() {
                 <Route path="/dashboard" exact component={Dashboard} />
                 <Route path="/maps" exact component={Maps} />
                 <Route path="/postcarding" exact component={Postcarding} />
-                <Route path="/tables" exact component={Tables} />
+                <Route path="/creditlog" exact component={Creditlog} />
                 <Redirect from="*" to="/dashboard" />
               </Switch>
               <FooterAdmin />

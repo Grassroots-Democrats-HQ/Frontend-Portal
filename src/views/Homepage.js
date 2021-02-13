@@ -7,7 +7,7 @@ import Footer from "components/Footers/Footer.js";
 export default function Homepage(props) {
   // When user signedIn state changes change the page
   useEffect(() => {
-    console.log(props.signedIn)
+    console.log("Signed in: " + props.signedIn)
   }, [props.signedIn])
 
   // Attach an event listener that listens for changes in auth state and updates the signedIn bool
