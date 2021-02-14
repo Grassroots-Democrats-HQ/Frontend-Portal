@@ -13,7 +13,7 @@ export default function MyCreditLog({ color }) {
   const [addCreditActive, setAddCreditActive] = useState(false)
 
   useEffect(() => {
-    let ref = firebase.database().ref("/creditlogs").child(firebase.auth().currentUser.uid)
+    let ref = firebase.database().ref("creditlogs").child(firebase.auth().currentUser.uid)
     console.log("User uid: " + firebase.auth().currentUser.uid)
     ref.on("value", snapshot => {
       const state = snapshot.val()

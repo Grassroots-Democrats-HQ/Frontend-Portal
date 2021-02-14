@@ -1,10 +1,36 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import firebase from "Firebase"
 
 // components
 
 import CardStats from "components/Cards/CardStats.js";
 
 export default function HeaderStats() {
+  const [totalHours, setTotalHours] = useState(0)
+
+  useEffect(() => {
+    let ref = firebase.database().ref("creditlogs")
+
+    ref.on("value", snapshot => {
+      const creditlogs = snapshot.val()
+      let total = 0;
+
+      if (creditlogs != null)
+      {
+        Object.values(creditlogs).forEach(user => {
+          Object.values(user).forEach(credit => {
+            total += parseInt(credit.hours)
+          })
+        })
+
+        setTotalHours(total)
+      }
+      console.log("Credit data from header")
+      console.log(creditlogs)
+    })
+  }, [])
+
+
   return (
     <>
       {/* Header */}
@@ -28,7 +54,7 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="Hours Volunteered"
-                  statTitle="2,356"
+                  statTitle={`${totalHours}`}
                   statArrow="down"
                   statPercent="3.48"
                   statPercentColor="text-red-500"

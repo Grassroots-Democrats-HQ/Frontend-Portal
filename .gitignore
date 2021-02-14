@@ -1,4 +1,5 @@
 .eslintcache
+.firebase
 
 # React .gitignore
 .DS_STORE
