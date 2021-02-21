@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import firebase from "../../Firebase"
 
-export default function Navbar() {
+export default function Navbar(props) {
+  const [pfpURL, setPfpURL] = useState("")
+
   function signOut()
   {
     firebase.auth().signOut()
-    window.open("/", "_self")
+    props.setSignedIn(false)
   }
+
+  useEffect(() => {
+    setPfpURL(firebase.auth().currentUser.photoURL)
+  }, [])
+
   return (
     <>
       {/* Navbar */}
@@ -25,10 +32,10 @@ export default function Navbar() {
               <p className="text-white mr-3"> Welcome {firebase.auth().currentUser.displayName.split(" ")[0]}! </p>
               {/* <p className="text-black mr-3"> {firebase.auth().currentUser.displayName}</p> */}
                 <span className="w-12 h-12 text-sm text-white bg-gray-300 inline-flex items-center justify-center rounded-full">
-                  <img
+                  <img id="user-pfp"
                     alt="..."
                     className="w-full rounded-full align-middle border-none shadow-lg"
-                    src={firebase.auth().currentUser.photoURL}/>
+                    src={pfpURL}/>
                 </span>
                 <button className="ml-3 bg-white active:bg-gray-100 text-gray-800 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
               onClick = {signOut}>

@@ -19,7 +19,9 @@ export default function HeaderStats() {
       {
         Object.values(creditlogs).forEach(user => {
           Object.values(user).forEach(credit => {
-            total += parseInt(credit.hours)
+            if (!isNaN(credit.hours)) {
+              total += credit.hours
+            }
           })
         })
 
@@ -42,7 +44,7 @@ export default function HeaderStats() {
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle="Postcards Sent"
-                  statTitle="90,000"
+                  statTitle="TBD"
                   statArrow="up"
                   statPercent="3.48"
                   statPercentColor="text-green-500"
@@ -53,7 +55,7 @@ export default function HeaderStats() {
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="Hours Volunteered"
+                  statSubtitle="Total Hours This Year"
                   statTitle={`${totalHours}`}
                   statArrow="down"
                   statPercent="3.48"
@@ -65,8 +67,8 @@ export default function HeaderStats() {
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="Phonebanks Conducted"
-                  statTitle="7"
+                  statSubtitle="Total Members"
+                  statTitle="TBD"
                   statArrow="down"
                   statPercent="1.10"
                   statPercentColor="text-orange-500"
@@ -77,8 +79,8 @@ export default function HeaderStats() {
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="Performance"
-                  statTitle="49,65%"
+                  statSubtitle="Some Other Metric"
+                  statTitle="TBD"
                   statArrow="up"
                   statPercent="12"
                   statPercentColor="text-green-500"

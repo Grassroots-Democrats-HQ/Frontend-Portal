@@ -37,8 +37,15 @@ export default function MyCreditLog({ color }) {
   function handleSubmitCredit()
   {
     let ref = firebase.database().ref("creditlogs").child(firebase.auth().currentUser.uid).child(new Date().getTime())
-    ref.set(newCredit)
-    setAddCreditActive(false)
+    if (isNaN(newCredit.hours) || newCredit.hours == "" || newCredit.hours.includes("e"))
+    {
+      alert("Please input only a number for the hours field")
+    } else {
+      ref.set({...newCredit, hours: parseFloat(newCredit.hours)})
+      setAddCreditActive(false)
+      setNewCredit({})
+    }
+
   }
 
   function handleEditCredit(event)
@@ -63,7 +70,7 @@ export default function MyCreditLog({ color }) {
       {addCreditActive ?
         <>
           <div className="flex flex-wrap content-evenly" style={{ position: "fixed", zIndex: 999, top: 0, left: 0, backgroundColor: "rgba(200, 200, 200, 0.4)", width: "100vw", height: "100vh" }}>
-            <div className="rounded-lg" style={{ margin: "auto", width: "40vw", height: "90vh", backgroundColor: "#fafafa", overflow: "auto" }}>
+            <div className="rounded-lg" style={{ margin: "auto", width: "40vw", height: "90vh", backgroundColor: "#edf2f7", overflow: "auto" }}>
               {/* Title */}
               <h1 className="text-3xl text-center mt-3">
                 Add/Edit A Credit
@@ -109,15 +116,17 @@ export default function MyCreditLog({ color }) {
                 </div>
                 
                 <div className=" my-2">
-                  Hours:
+                  Hours:  
                   <input
-                    onChange={e => setNewCredit({ ...newCredit, hours: e.target.value })}
-                    type="text"
+                    onChange={e => {setNewCredit({ ...newCredit, hours: e.target.value })}}
+                    required type="number"
+                    step="0.5"
+                    min="0.5"
                     placeholder="Number of Hours"
                     className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full" />
                 </div>
 
-                <div className="my-2">creditData
+                <div className="my-2">
                   Description:
                   <textarea
                     onChange={e => setNewCredit({ ...newCredit, description: e.target.value })}
@@ -139,6 +148,7 @@ export default function MyCreditLog({ color }) {
           </div>
         </>
         : null}
+
       <div
         className={
           "relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded " +
