@@ -11,6 +11,8 @@ export default function MyCreditLog({ color }) {
   const [creditData, setCreditData] = useState([])
   const [newCredit, setNewCredit] = useState({})
   const [addCreditActive, setAddCreditActive] = useState(false)
+  const [editCreditActive, setEditCreditActive] = useState(false)
+  const [selectedCreditIndex, setSelectedCreditIndex] = useState(0);
 
   useEffect(() => {
     let ref = firebase.database().ref("creditlogs").child(firebase.auth().currentUser.uid)
@@ -32,6 +34,7 @@ export default function MyCreditLog({ color }) {
   function handleAddCreditPressed()
   {
     setAddCreditActive(true)
+    setNewCredit()
   }
 
   function handleSubmitCredit()
@@ -48,16 +51,33 @@ export default function MyCreditLog({ color }) {
 
   }
 
-  function handleEditCredit(event)
+  function handleEditCreditSubmit()
   {
+    // get credit id from selected credit index
+    let creditID = Object.keys(creditData)[selectedCreditIndex]
+    console.log(creditID)
+    // get reference to that particular credit and update it
+    let ref = firebase.database().ref("creditlogs").child(firebase.auth().currentUser.uid).child(creditID)
+    ref.set(newCredit)
+    setEditCreditActive(false)
+  }
 
+  function handleEditCreditPressed(index)
+  {
+    // set selected credit index to index of credit pressed, open dialog window
+    setSelectedCreditIndex(index)
+    setNewCredit(Object.values(creditData)[index])
+    console.log(Object.values(creditData)[index])
+    setEditCreditActive(true)
   }
 
   function handleDeleteCredit(event)
   {
+    // if confirmed, delete credit
     let x = window.confirm("Are you sure you want to delete this credit?")
     if (x)
     {
+      // should probably refactor this but it works and i don't want to break it
       let index = parseInt(event.target.getAttribute('keyval'))
       let keyToDelete = Object.keys(creditData)[index]
       let ref = firebase.database().ref("creditlogs").child(firebase.auth().currentUser.uid).child(keyToDelete)
@@ -73,7 +93,7 @@ export default function MyCreditLog({ color }) {
             <div className="rounded-lg" style={{ margin: "auto", width: "40vw", height: "90vh", backgroundColor: "#edf2f7", overflow: "auto" }}>
               {/* Title */}
               <h1 className="text-3xl text-center mt-3">
-                Add/Edit A Credit
+                Add A Credit
               </h1>
 
               {/* Form */}
@@ -148,6 +168,98 @@ export default function MyCreditLog({ color }) {
           </div>
         </>
         : null}
+
+
+
+        {editCreditActive ?
+        <>
+          <div className="flex flex-wrap content-evenly" style={{ position: "fixed", zIndex: 999, top: 0, left: 0, backgroundColor: "rgba(200, 200, 200, 0.4)", width: "100vw", height: "100vh" }}>
+            <div className="rounded-lg" style={{ margin: "auto", width: "40vw", height: "90vh", backgroundColor: "#edf2f7", overflow: "auto" }}>
+              {/* Title */}
+              <h1 className="text-3xl text-center mt-3">
+                Edit A Credit
+              </h1>
+
+              {/* Form */}
+              <div className="" style={{ padding: 20 }}>
+                <div className="">
+                  Date:
+                  <input
+                    onChange={e => setNewCredit({ ...newCredit, date: e.target.value })}
+                    type="text"
+                    value = {newCredit.date}
+                    placeholder="Date"
+                    className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full" />
+                </div>
+
+                <div className="flex">
+                <div className="mr-2 my-2">
+                  Time In:
+                  <input
+                    onChange={e => setNewCredit({ ...newCredit, timeIn: e.target.value })}
+                    type="text"
+                    value = {newCredit.timeIn}
+                    placeholder="Time In"
+                    className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full" />
+                </div>
+
+                <div className="ml-2 my-2">
+                  Time Out:
+                  <input
+                    onChange={e => setNewCredit({ ...newCredit, timeOut: e.target.value })}
+                    type="text"
+                    value = {newCredit.timeOut}
+                    placeholder="Time Out"
+                    className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full" />
+                </div>
+                </div>
+                <div className=" my-2">
+                  Activity:
+                  <input
+                    onChange={e => setNewCredit({ ...newCredit, type: e.target.value })}
+                    type="text"
+                    value = {newCredit.type}
+                    placeholder="ex. recruit, campaign, postcards, ..."
+                    className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full" />
+                </div>
+                
+                <div className=" my-2">
+                  Hours:  
+                  <input
+                    onChange={e => {setNewCredit({ ...newCredit, hours: e.target.value })}}
+                    required type="number"
+                    value = {newCredit.hours}
+                    step="0.5"
+                    min="0.5"
+                    placeholder="Number of Hours"
+                    className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full" />
+                </div>
+
+                <div className="my-2">
+                  Description:
+                  <textarea
+                    onChange={e => setNewCredit({ ...newCredit, description: e.target.value })}
+                    type="text"
+                    value = {newCredit.description}
+                    placeholder="Time In"
+                    rows="3"
+                    className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full" />
+                </div>
+
+                <button onClick={handleEditCreditSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+                  Submit Edits
+                </button>
+                <button onClick={() => {setEditCreditActive(false)}} className="mx-4 bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+                  Close
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </>
+        : null}
+
+
 
       <div
         className={
@@ -270,7 +382,7 @@ export default function MyCreditLog({ color }) {
                   </td>
                   <td className="border-t-0 px-auto align-middle border-l-0 border-r-0 text-center p-4">
                     {/* <TableDropdown /> */}
-                    <button keyval={index} onClick={handleEditCredit} className="bg-black text-xs hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+                    <button keyval={index} onClick={() => {handleEditCreditPressed(index)}} className="bg-black text-xs hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
                       Edit
                     </button>
                     <button keyval={index} onClick={handleDeleteCredit} className="bg-red-500 text-xs hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">

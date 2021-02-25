@@ -2,8 +2,10 @@
   "rules": {
 
     "creditlogs": {
-      ".read": true,
+      // must be logged in to read any creditlogs
+      ".read": "auth != null",
       "$uid": {
+        // can only write to own creditlog
         ".write": "$uid == auth.uid"
       },
       ".write": false

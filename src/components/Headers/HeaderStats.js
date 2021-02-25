@@ -20,7 +20,7 @@ export default function HeaderStats() {
         Object.values(creditlogs).forEach(user => {
           Object.values(user).forEach(credit => {
             if (!isNaN(credit.hours)) {
-              total += credit.hours
+              total += parseFloat(credit.hours)
             }
           })
         })
@@ -30,6 +30,9 @@ export default function HeaderStats() {
       console.log("Credit data from header")
       console.log(creditlogs)
     })
+
+    console.log("USER LIST")
+    console.log(firebase.auth().listUsers)
   }, [])
 
 
